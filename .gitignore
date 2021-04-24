@@ -1,0 +1,7 @@
+# Project exclude paths
+/venv/
+/flaskr/instance/configuration.cfg
+/twitterService/
+/instance/configuration.cfg
+/flaskr/instance/flaskr.sqlite
+/instance/

@@ -1,0 +1,57 @@
+<script>console.log("{{title}}")</script>
+{% extends 'base.html' %}
+{% block homeActive %}active {% endblock %}
+{% block header %}
+  <h1>{% block title %} Basic NLP Implementations{% endblock %}</h1>
+
+
+  {% if g.user %}
+    <a class="action" href="{{ url_for('blog.create') }}">New</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <p class="importantText">This project involved creating a website using Python Flask, as well as working with SQLite DB and implementing an API using flask.\n
+    The main website uses the remote services of text-generatore and classification problem.\n
+    The purpose of this site is to encourege users to tag data that arrives from twitter in order to furtuere improve to the NN that classifies tweets.
+
+    Python Flask
+    Implement API using python
+    Create RNN based text-generator
+    Train NN for classification tasks
+    build and user services - microservices architecture
+    SQL database queries
+    Pytorch
+    Twitter API
+
+
+  </p>
+
+  {% for post in posts %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ post['title'] }}</h1>
+          <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
+        </div>
+        {% if g.user['id'] == post['author_id'] %}
+          <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+        {% endif %}
+      </header>
+      <p class="body">{{ post['body'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+  <p>
+
+    Classification - we anaylized tweet of both Clippers and Lakers accounts, now you can get a tweet - change it a little bit
+    and check if the classifier will guess that the tweet belongs to either the clippers and the lakers.
+    current results are:
+    Train set acc:
+    Test set acc:
+    Results of users : XX
+    also display accuracy by classification
+  </p>
+{% endblock %}

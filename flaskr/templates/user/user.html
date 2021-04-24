@@ -1,0 +1,56 @@
+<script>console.log("{{user.username|tojson}}")</script>
+
+{% extends 'base.html' %}
+  {% block content %}
+
+<div  style=" display:inline-block;    vertical-align: top;">
+   <form method="post">
+    <label for="fname">Name</label>
+    <input type="text" id="fname" name="fname" value="{{user.fname}}">
+
+    <label for="lname">Last Name</label>
+    <input type="text"   id="lname" name="lname" value="{{user.lname}}">
+
+    <label for="username">{{username}}</label>
+    <input name="username" id="username" required>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
+
+    <label for="newPassword">New Password</label>
+    <input type="password" name="newPassword" id="newPassword" required>
+    <label for="about">{{about}}</label>
+    <input type="text" id="about" name="about" value="abput">
+    <label for="email">Your email:</label>
+    <input type="email" id="email" name="email">
+    <input type="submit" value="Update">
+
+  </form>
+</div>
+
+
+ <div id="searches_iv_done" style=" display:inline-block;    vertical-align: top;padding-left:20%;">
+     <h2 style="text-align: right;  "> Things You Searched</h2>
+     <table>
+
+           <tr>
+               <th>
+                 Tweet
+             </th>
+             <th>
+                 Classification
+             </th>
+                <th>
+                 Was correct
+             </th>
+           </tr>
+
+          <tr>
+            <td>Jill</td>
+            <td>Smith</td>
+            <td>50</td>
+          </tr>
+     </table>
+ </div>
+
+{% endblock %}
+{% block userActive %}{{user.lname}} {% endblock %}

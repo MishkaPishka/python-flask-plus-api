@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+  {% block import %}
+        <script src="{{ url_for('static', filename='events_handler.js') }}"></script>
+
+{% endblock %}
+{% block header %}
+  <h1 class="blogPageHeaderTitle">{% block title %}{{ project_title}}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <p> {{ project_description}}</p>
+
+
+
+ {% block use_project %}
+
+  {% endblock %}
+<script>
+
+{% endblock %}
+
+
