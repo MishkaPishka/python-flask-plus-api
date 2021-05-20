@@ -38,9 +38,28 @@ function set_feedback_on_tweet_classification(feedback_data) {
     })
 }
 
-function set_feedback_text_generator(data) {
+function send_feedback_request(data) {
     return new Promise((resolve,reject)=> {
-        resolve("ok")
+     $.post("/text-gen/rank",{data})
+         .done(function(res) {
+            resolve(res['data'])
+          })
+          .fail(function(err) {
+            reject(err.responseText );
+          })
     })
 
+
+}
+
+function delete_history_request() {
+    return new Promise((resolve,reject) => {
+       $.post("/user/delete_history")
+         .done(function(res) {
+            resolve(res['data'])
+          })
+          .fail(function(err) {
+            reject(err );
+          })
+    })
 }

@@ -2,7 +2,7 @@
 # At the moment - text generation and classification
 import requests
 
-GEN_TEXT_SERVICE_BASE_URL_GET = 'http://127.0.0.1:5002/?'
+GEN_TEXT_SERVICE_BASE_URL_GET = 'http://127.0.0.1:5001/api/v1/gen-text?'
 TWITTER_CLASSIFIER_BASE_URL = 'http://127.0.0.1:5002/'
 
 GET_TEET_FORMAT = ''
@@ -10,9 +10,9 @@ CLASSIFY_TWEET_FORMAT = ''
 FEEDBACK_SERVICE_FORMAT = ''
 
 
-def text_gen_api_request(seed,length,method):
-    function_to_be_used = request_wrapper(requests.get)
-    return function_to_be_used(GEN_TEXT_SERVICE_BASE_URL_GET, {'seed': seed,'length':length,'method':method})
+def text_gen_api_request(seed,method,output_length):
+    function_to_be_used = request_wrapper(requests.get) # requests.get = a method
+    return function_to_be_used(GEN_TEXT_SERVICE_BASE_URL_GET, {'seed': seed,'method':method,'output_length':output_length})
 
 
 def get_twitter_by_username_request(twitter_username):
@@ -21,16 +21,6 @@ def get_twitter_by_username_request(twitter_username):
     # ## TODO -- ADD DATA or format reply
     function_to_be_used = request_wrapper(requests.get)
     return function_to_be_used(GEN_TEXT_SERVICE_BASE_URL_GET, "query_value={}&max_results=10&type=name".format(twitter_username))
-
-    # try:
-    #     requests.get(TWITTER_CLASSIFIER_BASE_URL+GET_TEET_FORMAT,  "query_value={}&max_results=10&type=name".format(twitter_username)).json()
-    # except Exception as err:
-    #     print('get_twitter_by_username_request',err)
-    #     #RETURN MOK UPS
-    #     a = 'bbbbbb'
-    #     a = 'bbbbbb'
-    #     x = a *10
-    #     return {"data":x}
 
 
 def classify_tweet(tweet):
@@ -42,7 +32,7 @@ def classify_tweet(tweet):
 def send_feedback_on_tweet_classification(tweet,classification,feedback,user):
     function_to_be_used = request_wrapper(requests.post)
     return function_to_be_used(TWITTER_CLASSIFIER_BASE_URL + FEEDBACK_SERVICE_FORMAT,
-                               {'tweet':tweet,'classification':classification,'feedback':feedback,'user':user})
+                               {'data':tweet,'classification':classification,'user_feedback':feedback,'author_id':user})
 
 
 def request_wrapper(func):

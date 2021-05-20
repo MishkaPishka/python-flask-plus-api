@@ -1,56 +1,227 @@
-<script>console.log("{{user.username|tojson}}")</script>
 
 {% extends 'base.html' %}
+{% block userActive %}active {% endblock %}
+
+  {% block import %}
+        <script src="{{ url_for('static', filename='events_handler.js') }}"></script>
+        <script> var GENERATION_METHOD= {0:'characters',1:'n-gram',2:'RNN'}</script>
+        <script> var CLASSIFICATION_MAP= {0:'Lakers',1:'Clippers'}</script>
+
+{% endblock %}
   {% block content %}
 
 <div  style=" display:inline-block;    vertical-align: top;">
-   <form method="post">
+   <form id='details_form' method="post" action="/user/update">
     <label for="fname">Name</label>
     <input type="text" id="fname" name="fname" value="{{user.fname}}">
 
     <label for="lname">Last Name</label>
     <input type="text"   id="lname" name="lname" value="{{user.lname}}">
 
-    <label for="username">{{username}}</label>
-    <input name="username" id="username" required>
+    <label for="username">Username</label>
+    <input name="username" id="username" value="{{user.username}}">
     <label for="password">Password</label>
     <input type="password" name="password" id="password" required>
 
     <label for="newPassword">New Password</label>
-    <input type="password" name="newPassword" id="newPassword" required>
+    <input type="password" name="newPassword" id="newPassword" >
     <label for="about">{{about}}</label>
-    <input type="text" id="about" name="about" value="abput">
+    <label for="about">About yourself</label>
+
+    <input type="text" id="about" name="about" value="{{user.about}}">
     <label for="email">Your email:</label>
-    <input type="email" id="email" name="email">
+    <input type="email" id="email" name="email" value="{{user.email}}">
     <input type="submit" value="Update">
 
   </form>
+    <div>
+<button id="delete_account_btn">Delete History</button>
+
+</div>
+
 </div>
 
 
- <div id="searches_iv_done" style=" display:inline-block;    vertical-align: top;padding-left:20%;">
-     <h2 style="text-align: right;  "> Things You Searched</h2>
-     <table>
 
+ <div id="searches_iv_done" style=" display:inline-block;   vertical-align: top;padding-left:20%;">
+     <h2 style="text-align: center;  "> Text You Generated</h2>
+     <table class="table table-striped">
+         <thead>
            <tr>
-               <th>
-                 Tweet
-             </th>
-             <th>
-                 Classification
-             </th>
-                <th>
-                 Was correct
-             </th>
+               <th scope="col">
+                 #
+               </th>
+               <th scope="col">
+                 Method
+               </th>
+               <th scope="col">
+                    SEED
+                </th>
+               <th scope="col">
+                 Outputsize
+               </th>
+               <th scope="col">
+                 Output
+                </th>
+               <th scope="col">
+                 Score
+                </th>
            </tr>
+         </thead>
+         <tbody>
+          {% for x in generated_text_data_table %}
+               <tr>
+                  <td>{{ loop.index0 + 1}}</td>
 
-          <tr>
-            <td>Jill</td>
-            <td>Smith</td>
-            <td>50</td>
-          </tr>
+                  <td  class='cc' id = "method_{{ loop.index0 + 1}}" onClick="myFunction('method_{{ loop.index0 + 1}}',{{ x.param_method}})">{{ x.param_method}}</td>
+                   <td>{{ x.seed }}</td>
+                    <td>{{ x.param_output_size }}</td>
+                    <td>{{ x.data }}</td>
+                    <td>{{ x.score }}</td>
+
+
+                 </tr>
+           {% endfor %}
+         </tbody>
+
+
      </table>
  </div>
+ <div id="searches_iv_done1" style=" display:inline-block;    vertical-align: top;padding-left:20%;">
+      <h2 style="text-align: center;  "> Tweets we classified for you</h2>
 
+          <table class="table table-striped">
+         <thead>
+           <tr>
+               <th scope="col">
+                 #
+               </th>
+               <th scope="col">
+                 Data
+               </th>
+               <th scope="col">
+                 Classification
+                </th>
+               <th scope="col">
+                 User Feedback
+               </th>
+
+           </tr>
+         </thead>
+         <tbody>
+          {% for x in  twitter_classification_plus_feedback_table %}
+               <tr>
+                  <td>{{ loop.index0 + 1}}</td>
+
+
+                  <td>{{ x.data }}</td>
+                     <td  class='dd' id = "classficiation_{{ loop.index0 + 1}}" onClick="myFunction2('classficiation_{{ loop.index0 + 1}}',{{  x.classification}})">{{ x.classification}}</td>
+                     <td  class='ee' id = "user_feedback_{{ loop.index0 + 1}}" onClick="myFunction2('user_feedback_{{ loop.index0 + 1}}',{{  x.user_feedback}})">{{ x.user_feedback}}</td>
+
+<!--                   <td>{{ x.classification }}</td>-->
+<!--                    <td>{{ x.user_feedback }}</td>-->
+
+
+
+                 </tr>
+           {% endfor %}
+         </tbody>
+
+
+     </table>
+
+ </div>
+
+
+
+<!--<table class="table table-striped">-->
+<!--  <thead>-->
+<!--    <tr>-->
+<!--      <th scope="col">#</th>-->
+<!--      <th scope="col">First</th>-->
+<!--      <th scope="col">Last</th>-->
+<!--      <th scope="col">Handle</th>-->
+<!--    </tr>-->
+<!--  </thead>-->
+<!--  <tbody>-->
+<!--    <tr>-->
+<!--      <th scope="row">1</th>-->
+<!--      <td>Mark</td>-->
+<!--      <td>Otto</td>-->
+<!--      <td>@mdo</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <th scope="row">2</th>-->
+<!--      <td>Jacob</td>-->
+<!--      <td>Thornton</td>-->
+<!--      <td>@fat</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <th scope="row">3</th>-->
+<!--      <td>Larry</td>-->
+<!--      <td>the Bird</td>-->
+<!--      <td>@twitter</td>-->
+<!--    </tr>-->
+<!--  </tbody>-->
+<!--</table>-->
+ </div>
+
+
+<script>
+$(document).ready(function(){
+
+$(".cc").each(function() {
+    console.log($(this).html( GENERATION_METHOD[$(this).html()]));
+});
+$(".dd").each(function() {
+$(this).html( CLASSIFICATION_MAP[$(this).html()])
+
+});
+$(".ee").each(function() {
+    console.log($(this).html( CLASSIFICATION_MAP[$(this).html()]));
+});
+});
+
+$(function() {
+    $( "#delete_account_btn" ).click(function() {
+      delete_history();
+    });
+
+  $('#details_form').submit(function(event) {
+    event.preventDefault();
+    var form = $(this);
+    new Promise((resolve,reject) => {
+       $.ajax({
+      type: 'post',
+      url: '/user/update',
+      data: form.serialize()
+    }).done(function(data) {
+      // Optionally alert the user of success here...
+      resolve(data);
+    }).fail(function(data) {
+      // Optionally alert the user of an error here...
+       reject(data);
+
+    })}).then(data => {alert(JSON.stringify(data))})
+    .catch(err => {alert(JSON.stringify(err.responseText))});
+
+    })
+
+
+});
+function myFunction(id,val) {
+    console.log(id,val);
+    $("#"+id).html( GENERATION_METHOD[val]);
+
+
+};
+
+function myFunction2(id,val) {
+    console.log(id,val);
+    $("#"+id).html( CLASSIFICATION_MAP[val]);
+
+
+};
+
+</script>
 {% endblock %}
-{% block userActive %}{{user.lname}} {% endblock %}

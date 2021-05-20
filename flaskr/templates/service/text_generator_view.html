@@ -1,7 +1,9 @@
 {% extends '/service/base_service.html' %}
+{% block gentextActive %}active{%endblock%}
+
 {% block content %}
   <div>
-        <img src="{{ url_for('static', filename='Shakespeare.jpg') }}"  style="width: 50%;
+        <img src="{{ url_for('static', filename='images/Shakespeare.jpg') }}"  style="width: 50%;
   height: 10%;  display: block;
   margin-left: auto;
   margin-right: auto;
@@ -9,9 +11,8 @@
 
 
 </div>
-
  {% block use_project %}
-    <p>Insert a sequence of up to 10 charachters and select the output size and click Go! </p>
+    <h3 style="text-align:center">Insert a sequence of up to 10 charachters and select the output size and click Go! </h3>
   {% endblock %}
 <div class="container">
      <form  id='form1' method="POST"  >
@@ -21,17 +22,18 @@
                   <input type="text" id="seed1" class="form-control mb-2 mr-sm-2" name='seed' placeholder="">
             </div>
             <div class="col-sm-3">
-                <label for="charRange1" >Select desired output size</label>
-                <input type="number" id='charRange1' class="form-control" min="0"  max="1000" data-toggle="tooltip" data-placement="top" title="Up to 1000 charachters"name="length" ></input>
+                <label for="output_length" >Select desired output size</label>
+                <input type="number" id='output_length' class="form-control" min="0"  max="1000" data-toggle="tooltip" data-placement="top" title="Up to 1000 charachters" name="output_length" ></input>
             </div>
             <div class="col-sm-3">
                 <label for="method">Generation Method</label>
-                <select name="method" id="method"class="form-control"  onchange="if (this.selectedIndex == 1) $('#param_label').text('Enter up to 4 words'); else {$('#param_label').text('Enter a sequence of up to 10 characters')}">
+                <select name="method" id="method" class="form-control "  onchange="if (this.selectedIndex == 1) $('#param_label').text('Enter up to 4 words'); else {$('#param_label').text('Enter a sequence of up to 10 characters')}">
                     <option value="characters" selected >Statistics - characters</option>
                     <option value="n-gram">N Gram</option>
                     <option value="RNN">RNN</option>
               </select>
             </div>
+
 
              <div class="col-sm-2">
                  <div style="padding-top:20%;">
@@ -46,15 +48,15 @@
      </form>
 
         <div class="row">
-            <div class="col-9">
+            <div class="col-7">
                 <label for="output1">Output</label>
-                <textarea id='output1' class="textarea form-control"  value="Output Result Text" ></textarea>
+                <textarea id='output1' class="textarea form-control"  value="Output Result Text" readonly ></textarea>
 
             </div>
             <div class="col-3">
-                <label for="rank-text">Rank the generated text</label>
-                <select class="form-select" id="rank-text" >
-                  <option selected>Feedback Score</option>
+                <label for="rank-text" style="padding-bottom:5%;">Rank the generated text</label>
+                <select class="form-control" id="rank-text" >
+                  <option value="0" selected>Feedback Score</option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
@@ -62,7 +64,10 @@
                   <option value="5">Five</option>
 
                 </select>
-                     <button type="button" class="btn btn-primary" id="submit-feedback-button">Submit Feedback</button>
+
+            </div>
+            <div class="col-2">
+                 <button type="button" class="btn btn-success" style="margin-top:25%;" id="submit-feedback-button">Submit Feedback</button>
 
             </div>
         </div>
@@ -72,19 +77,18 @@
 
 
 
-<!--        <div class="col">-->
-<!--          <label for="output1">Output</label>-->
-
-<!--            <textarea id='output1' class="textarea form-control"  >bla</textarea>-->
-
-<!--        </div>-->
-
 <script>
 $(document).ready(function(){
+console.log("********");
   $('[data-toggle="tooltip"]').tooltip();
+  //
+  $('#submit-feedback-button').click(
+        function() { give_feedback_on_gen_text(); }
+    );
+//
 });
-
 $(function(){
+
   $('#form1').submit(function(){
     $.post($(this).attr('action'), $(this).serialize(), function(json) {
         if (json.data == null) {
@@ -99,11 +103,10 @@ $(function(){
     );
 
     return false;
-  });
+  }
 
-  $('#submit-feedback-button').click(
-    funciton() { send_feedback_event('rank-text') }
-     );
+  );
+
 
 
 });

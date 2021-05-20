@@ -3,12 +3,6 @@ from datetime import timedelta
 
 from flask import Flask,session
 
-# from .  import db
-# from .  import auth
-# from .  import blog
-# from .  import user
-# from . import text_generator
-# from . import twitter_classification
 
 import  db
 import auth
@@ -17,6 +11,7 @@ import user
 
 import text_generator
 import twitter_classification
+from flaskr import about
 
 
 def create_app(test_config=None):
@@ -66,6 +61,8 @@ def create_app(test_config=None):
     app.register_blueprint(twitter_classification.bp)
     app.register_blueprint(text_generator.bp)
 
+    app.register_blueprint(about.bp)
+
 
     # # a simple page that says hello
     # @app.route('/hello')
@@ -74,7 +71,10 @@ def create_app(test_config=None):
 
     return app
 
+
+# Further file processing goes here
 if __name__ == '__main__':
+
     app = create_app()
     print('app.debug == True',app.debug == True)
 
@@ -82,9 +82,11 @@ if __name__ == '__main__':
     # with app.app_context():
     #     # within this block, current_app points to app.
     #     db.init_db()
-
+    # exit(0)
     app.run()
 
     # app.run(port=5001)
 
     # app.run(debug=True)
+
+

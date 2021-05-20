@@ -32,7 +32,7 @@ def register():
                 db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
         ).fetchone() is not None:
-            error = 'User {} is already registered.'.format(username)
+            error = 'Username {} is already taken.'.format(username)
 
         if error is None:
             db.execute(
@@ -99,6 +99,8 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
+            if request.method == 'POST':
+                return "Must Login first",405
             # g.setdefault('from',request.url)
             return redirect(url_for('auth.login',next=request.url))
 
@@ -107,3 +109,8 @@ def login_required(view):
     return wrapped_view
 
 
+#checks password of user with username versus a
+def valid_credentials(g_user,password):
+   if g_user == None or 'username' not in g_user.keys(): return False
+   hashed_password = db_queries.get_user_field_by_username(get_db(),g_user['username'],'hashed_password')
+   return  check_password_hash(hashed_password, password)
