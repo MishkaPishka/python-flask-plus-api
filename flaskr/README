@@ -1,0 +1,23 @@
+FLASK PROJECT:
+Generate text and get feedback from users.
+
+
+WEBPAGE
+DATABASE (SQLITE)
+API + MICROSERVICES
+
+TO RUN:
+
+NEED configuration.cfg in order to run.
+format is :
+
+ENV="development"
+DEBUG = True
+SECRET_KEY = ** YOUR SECRET **
+PORT= ** YOUR PORT **
+SERVER_NAME= ** SERVER ADDRESS **
+
+RUN INIT FILE TO START SERVER.
+
+
+

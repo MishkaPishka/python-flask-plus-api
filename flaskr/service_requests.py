@@ -12,7 +12,8 @@ FEEDBACK_SERVICE_FORMAT = ''
 
 def text_gen_api_request(seed,method,output_length):
     function_to_be_used = request_wrapper(requests.get) # requests.get = a method
-    return function_to_be_used(GEN_TEXT_SERVICE_BASE_URL_GET, {'seed': seed,'method':method,'output_length':output_length})
+    return function_to_be_used(GEN_TEXT_SERVICE_BASE_URL_GET, {'seed': seed,'method':method,'output_length':output_length}).text
+
 
 
 def get_twitter_by_username_request(twitter_username):
@@ -41,8 +42,8 @@ def request_wrapper(func):
             return  func(*args, **kwargs)
 
         except Exception as err:
-            print("Error in {}".format(func.__name__), err)
+            return ( "service error",420)
             # return {'data':'blabla'}
-            return "service error",420
+
 
     return add_try_catch
